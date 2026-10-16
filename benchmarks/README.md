@@ -30,6 +30,7 @@ benchmarks/
   runs/gpt-6-luna/            Second model's catalog and retrieval supplement
   runs/gpt-4.1-nano/          Third model's catalog and retrieval supplement
   runs/model-comparison/     Cross-model results, verified rates and execution status
+  plot/                      Six-family overview, timing/cost comparison and regeneration script
   scripts/                    Dataset authoring, evaluation and profiling tools
   evaluation/                 Catalog execution with explicit unsupported cases
   retrieval/                  Actual-index retrieval diagnostics
@@ -88,12 +89,26 @@ Offline demo contract checks:
 
 ## Results
 
+Read the [benchmark description](BENCHMARK_DESCRIPTION.md) for metric formulas,
+coverage and interpretation. The [16:9 presentation overview](plot/benchmark_overview.png)
+combines the family scores, SDK latency, cost, tokens and shared retrieval metrics.
+
 The requested [three-model comparison](runs/model-comparison/REPORT.md) runs
 `gpt-5-nano`, `gpt-6-luna`, then `gpt-4.1-nano` with the same supported catalog
 cases and separate actual-index retrieval supplements. It reports checks by
 family, observed timing, actual returned token usage and estimated API costs.
 See [cost accounting](model_comparison/README.md#token-usage-and-cost) for the
 formula, cache treatment and missing-usage limitations.
+
+View the [benchmark plots](plot/README.md) for all six families, worker timing
+and observed API cost, with PNG and SVG exports. Retrieval and grounding
+diagnostics are labeled separately from scored behavioral agreement.
+The [latency/token plot](plot/latency_tokens.png) and
+[latency/money plot](plot/latency_money.png) use a 1x2 layout: Min/Mean/Max SDK-call
+latency on the left and whole-run token usage or API cost on the right.
+The [category](plot/retrieval_category.png), [exact-place](plot/retrieval_known_place.png)
+and [guide](plot/retrieval_guides.png) charts compare six retrieval metrics with
+model configurations on the x-axis and a shared 0–100 display scale.
 
 Open the **[gpt-5-nano results](runs/gpt-5-nano/REPORT.md)** for the previous
 600-case catalog report and the new 100-case live-index retrieval supplement.

@@ -14,7 +14,7 @@ import sys
 from time import perf_counter
 
 from api.runtime import RetrievalRuntime
-from frontend.media import build_place_cards
+from ui.media import build_place_cards
 from src.generation.rag_generation import build_rag_context
 from src.retrieval.category_filters import metadata_photo_category
 from src.retrieval.image_filters import image_matches_filters, place_metadata
