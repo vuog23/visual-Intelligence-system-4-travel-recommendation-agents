@@ -1,50 +1,42 @@
-# VISTRA
+# VISTRA — Visual Intelligence System for Travel Recommendation & Agents
 
 **Your travel companion, with memory.**
 
-VISTRA is an AI travel assistant for grounded Q&A and multi-turn itinerary planning. It remembers your preferences, retrieves travel guides and place photos, and brings weather into plans you can refine through conversation.
+VISTRA is an AI travel assistant for Vietnam, combining travel guides, place
+photos, conversation memory and itinerary planning. Users can explore destinations,
+ask source-based questions and refine a trip through follow-up messages.
 
-## A look inside
+## System overview
 
-![VISTRA chat with Hanoi place photos, ratings, addresses, and Maps links](assets/readme/vistra-ui.png)
+![VISTRA system overview](assets/readme/vistra-pipeline.png)
 
-Chat naturally, explore photos and place details beneath each reply, and revisit your saved conversations.
+VISTRA loads conversation memory, interprets the request and selects a direct
+reply, grounded Q&A or planning path. It retrieves relevant evidence, builds and
+checks the answer or itinerary, then saves the completed turn for future edits.
+PostgreSQL stores memory and place metadata; Qdrant supports guide and photo
+retrieval. Weather and optional route estimates inform planning, while missing
+evidence is identified in partial results.
 
-## From question to trip
+## Benchmark overview
 
-![VISTRA pipeline: memory and intent, evidence retrieval, grounded answers and itinerary planning, then save and deliver](assets/readme/vistra-pipeline-v2.png)
+![VISTRA English benchmark overview](benchmarks/plot/benchmark_overview.png)
 
-PostgreSQL holds conversation memory and indexed place metadata; Qdrant retrieves guide and photo evidence. Grounded answers receive format, citation and grounding checks. Itineraries follow a TravelPlanner-style tools → notebook → planner → schedule construction flow, with constraint checks and bounded repair before delivery. Optional OpenRouteService estimates support travel-time checks; missing evidence stays explicit in partial drafts.
+The benchmark compares **GPT-5 nano, GPT-6 Luna and GPT-4.1 nano** across routing,
+retrieval, grounding, memory, planning and reliability. It contains **600 English
+and Vietnamese cases** from 300 scenario families. The current runner supports
+**408/600 cases (68%)**, with 192 unsupported. A separate **100-case retrieval
+supplement** evaluates the actual index.
 
-See the [pipeline review](assets/readme/vistra-pipeline-review.md) for implementation references and availability limits.
+The overview shows behavioral checks, citation presence, retrieval metrics,
+SDK-call latency, token usage and estimated API cost. GPT-6 Luna leads the
+observed routing, memory and structural planning checks; GPT-4.1 nano has the
+lowest mean SDK latency, and GPT-5 nano has the lowest recorded cost estimate.
+Retrieval results are shared across all three configurations.
 
-## Get started
+These are development measurements, not overall accuracy: citation presence does
+not establish factual correctness, and structural planning checks do not prove
+complete itinerary feasibility.
 
-This GitHub distribution excludes the local `frontend/` and `api/` folders,
-model caches, indexed datasets, and the benchmark golden set. The browser/API
-instructions below describe a full local checkout. Railway and Vercel entry
-points require the excluded `api/` package and cannot deploy from this source
-distribution alone. The golden dataset is planned for separate Hugging Face
-publication; see [benchmark publication notes](benchmarks/README.md#github-publication).
-
-Use the existing `.env`, model cache, and indexed datasets. New installations need provider keys and PostgreSQL settings; see the [setup guide](api/README.md).
-
-Run from the project root on Windows; create `.venv` with `python -m venv .venv` if needed:
-
-```powershell
-.\.venv\python.exe -m pip install -r requirements.txt
-docker compose -f compose.postgres.yaml -f compose.qdrant.yaml up -d
-.\.venv\python.exe -B -m frontend.server
-```
-
-Open **[VISTRA chat](http://127.0.0.1:8000)**. Try “Plan three relaxed days in Hanoi,” then “Make day two more relaxed; keep the other days unchanged.” Add your trip dates to request a forecast.
-
-**Terminal:** run `main.py --chat`; type `/last` to inspect the full backend JSON.
-
-**Developer API:** follow the [API &amp; Docker guide](api/README.md) to call `POST /v1/chat` with `X-API-Key`. See the [frontend guide](frontend/README.md) for chat and memory controls.
-
-**Vercel:** the developer API uses the root `app.py`, with the FastAPI preset. See the [Vercel setup and runtime requirements](api/README.md#vercel).
-
-**Railway:** the root `railway.json` starts `api.server:create_app` on Railway's assigned port. See the [Railway setup](api/README.md#railway).
-
-**Benchmarks:** open the [three-model comparison](benchmarks/runs/model-comparison/REPORT.md) for checks, token usage, estimated cost and timing. The [gpt-5-nano results](benchmarks/runs/gpt-5-nano/REPORT.md) retain the original first run. See [benchmarks/](benchmarks/README.md) for datasets, runners and reproduction instructions.
+[Benchmark description](benchmarks/BENCHMARK_DESCRIPTION.md) ·
+[Three-model results](benchmarks/runs/model-comparison/REPORT.md) ·
+[Mô tả tiếng Việt](benchmarks/BENCHMARK_DESCRIPTION_VI.md)

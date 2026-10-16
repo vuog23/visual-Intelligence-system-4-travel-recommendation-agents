@@ -167,7 +167,7 @@ def main():
         from src.retrieval.image_retriever import ImageRetriever
         from src.service.search_service import SearchService
         from src.generation.rag_generation import build_rag_context
-        from frontend.media import build_place_cards
+        from ui.media import build_place_cards
         text=resources.enter_context(TextRetriever(embedder=TextEmbedder(),sparse_embedder=SparseEmbedder()))
         image=resources.enter_context(ImageRetriever(embedder=ImageEmbedder()))
         search=resources.enter_context(SearchService(text_retriever=text,image_retriever=image))

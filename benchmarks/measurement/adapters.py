@@ -127,7 +127,7 @@ def schedule(case, fixtures, meter):
 
 
 def photos(case, fixtures, meter):
-    from frontend.media import build_place_cards
+    from ui.media import build_place_cards
     from src.generation.rag_generation import build_rag_context
     from src.retrieval.category_filters import photo_category_constraints
     from src.schema.models import SearchResult, SearchResponse
